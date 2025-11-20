@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسرة طلاب من أجل مصر - النسخة الكاملة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1A3E72;
+            --secondary-color: #E31B23;
+            --accent-color: #F8D117;
+            --light-bg: #F7F9FC;
+            --dark-text: #2c3e50;
+            --light-text: #5a6a7a;
+            --border-radius: 20px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        html { scroll-padding-top: 100px; }
+        body { font-family: 'Tajawal', sans-serif; color: var(--dark-text); background-color: var(--light-bg); line-height: 1.7; overflow-x: hidden; opacity: 0; transition: opacity 0.6s ease-in; }
+        body.loaded { opacity: 1; }
+        
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2.5rem; max-width: 1400px; margin: 0 auto; }
+        .logo { display: flex; align-items: center; text-decoration: none; }
+        .logo img { height: 60px; margin-left: 12px; }
+        .logo span { color: var(--dark-text); font-weight: 800; font-size: 1.6rem; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a, .nav-links .nav-item { text-decoration: none; color: var(--dark-text); margin: 0 0.2rem; padding: 0.5rem 1rem; border-radius: 50px; transition: var(--transition); font-weight: 500; cursor: pointer; }
+        .nav-links a:hover, .nav-links .nav-item:hover, .nav-item-dropdown:hover > .nav-item { color: var(--primary-color); background: rgba(26, 62, 114, 0.05); }
+        .dropdown-menu { display: none; position: absolute; top: 100%; right: 0; background-color: white; min-width: 220px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 1; border-radius: 12px; padding: 0.5rem 0; animation: fadeInDown 0.3s ease; border: 1px solid #f0f0f0; }
+        .dropdown-menu span, .dropdown-menu a { display: block; padding: 0.8rem 1.5rem; color: var(--dark-text); text-decoration: none; text-align: right; }
+        .nav-item-dropdown { position: relative; }
+        .nav-item-dropdown:hover .dropdown-menu { display: block; }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .hamburger { display: none; background: none; border: none; font-size: 1.5rem; color: var(--primary-color); cursor: pointer; }
+        
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 2rem; background: linear-gradient(135deg, #F7F9FC 0%, #E8EDF5 100%); text-align: center; }
+        .hero-content { z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        .hero-logo-container { margin-bottom: 2rem; animation: hero-logo-entry 1s ease-out 0.5s both; }
+        .hero-logo-container img { width: 220px; height: auto; max-width: 60vw; }
+        @keyframes hero-logo-entry { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1rem; color: var(--primary-color); font-weight: 800; animation: text-entry 0.8s ease-out 1s both; }
+        .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.4rem); margin-bottom: 2.5rem; color: var(--light-text); max-width: 600px; animation: text-entry 0.8s ease-out 1.2s both; }
+        .hero-buttons { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; animation: text-entry 0.8s ease-out 1.4s both; }
+        @keyframes text-entry { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .btn-primary, .btn-secondary { padding: 1rem 2.5rem; border-radius: 50px; font-weight: 700; transition: var(--transition); cursor: pointer; display: inline-block; }
+        .btn-primary { background-color: var(--secondary-color); color: white; border: 2px solid var(--secondary-color); }
+        .btn-secondary { background-color: white; color: var(--primary-color); border: 2px solid var(--primary-color); }
+        
+        .content-section { padding: 5rem 2rem; }
+        .section-title { font-size: 2.5rem; font-weight: 800; color: var(--primary-color); margin-bottom: 3rem; text-align: center; }
+        .section-title::after { content: ''; display: block; margin: 0.5rem auto 0; width: 100px; height: 5px; background: linear-gradient(to right, var(--secondary-color), var(--accent-color)); border-radius: 3px; }
+        .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        /* [START] New UI/UX for Coordinators Section */
+        #board-structure-section { background: #F0F4F8; }
+        .structure-grid { 
+            display: grid; 
+            /* 5 members layout: 5 columns on large screen, 2 on medium, 1 on small */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 2.5rem; 
+            max-width: 1300px; 
+            margin: auto; 
+        }
+        .member-card { 
+            background: white; 
+            padding: 2.5rem 1.5rem 1.5rem; 
+            text-align: center; 
+            border-radius: 18px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 1px solid rgba(26, 62, 114, 0.05);
+            cursor: pointer;
+        }
+        .member-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); 
+        }
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            transition: transform 0.4s ease;
+            transform: translateY(-6px);
+        }
+        .member-card:hover::before {
+            transform: translateY(0);
+        }
+        .member-card img { 
+            width: 130px; 
+            height: 130px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-bottom: 1.2rem; 
+            border: 5px solid var(--accent-color); 
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.8), 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+        }
+        .member-card:hover img {
+            border-color: var(--secondary-color);
+        }
+        .member-card h3 { 
+            font-size: 1.4rem; 
+            color: var(--dark-text); 
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .member-card p {
+            font-size: 1.1rem;
+            color: var(--secondary-color); /* Highlight the "منسق عام" role */
+            font-weight: 500;
+        }
+        /* [END] New UI/UX for Coordinators Section */
+
+        #faculties-section { background: #F0F4F8; }
+        .faculties-grid { 
+            display: grid; 
+            /* Grid to handle 19 items, making cards smaller to fit more */
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 1.5rem; 
+            max-width: 1400px; 
+            margin: auto; 
+        }
+        .faculty-card { 
+            background: white; 
+            padding: 1.5rem; 
+            text-align: center; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border-top: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+            cursor: pointer; /* Added for interaction */
+        }
+        .faculty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary-color);
+        }
+        .faculty-card i { 
+            font-size: 2.2rem; 
+            margin-bottom: 0.8rem; 
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+        .faculty-card:hover i {
+             color: var(--secondary-color);
+        }
+        .faculty-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        
+        #activities-section { background: white; }
+        .tabs-container { text-align: center; margin-bottom: 3rem; }
+        .tab-btn { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); padding: 0.8rem 2rem; margin: 0 0.5rem; border-radius: 50px; font-weight: 700; cursor: pointer; }
+        .tab-btn.active { background: var(--primary-color); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .committees-container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+        .committee-card { 
+            background: #fff; 
+            border-radius: var(--border-radius); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            overflow: hidden; 
+            border: 1px solid #eee; 
+        }
+        .committee-header { 
+            padding: 1.5rem 2rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .committee-header:hover {
+            background-color: #f9f9f9;
+        }
+        .committee-title { display: flex; align-items: center; gap: 1.5rem; font-size: 1.3rem; font-weight: 700; }
+        .committee-icon { font-size: 1.8rem; color: var(--secondary-color); width: 35px; text-align: center; }
+        .toggle-icon { font-size: 1.5rem; color: var(--light-text); transition: transform 0.4s ease; }
+        .committee-header.active .toggle-icon { transform: rotate(45deg); }
+        .committee-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .committee-content { 
+            padding: 0 2rem 1.5rem;
+            font-size: 1.05rem;
+            color: var(--light-text);
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        /* Adjusted styles for new content: removing default ul/li styles */
+        .committee-content p { margin: 0; } 
+        
+        .family-activities-container { max-width: 1200px; margin: auto; text-align: center; }
+        .family-activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        
+        /* New style for Coming Soon message */
+        .coming-soon-message {
+            text-align: center;
+            padding: 50px 20px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            background-color: white;
+            border-radius: var(--border-radius);
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: var(--box-shadow);
+        }
+
+        #news-section { background: #F0F4F8; }
+        .news-carousel { display: flex; gap: 2rem; overflow-x: auto; padding-bottom: 1.5rem; max-width: 1200px; margin: auto; }
+        .news-item { 
+            min-width: 320px; 
+            background: white; 
+            padding: 1.5rem; 
+            border-top: 5px solid var(--secondary-color);
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
+        .news-item img { 
+            width: 100%; 
+            height: auto; 
+            border-radius: 8px; 
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+        .news-date { color: var(--secondary-color); font-weight: 700; margin-bottom: 0.5rem;}
+        .news-item h3 { 
+            font-size: 1.2rem; 
+            font-weight: 700; 
+            color: var(--primary-color); 
+            margin-bottom: 1rem;
+        }
+        /* Style for multiple images in news item */
+        .news-images-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Spacing between images */
+            margin-top: 1rem;
+        }
+        
+        #sponsors-section { background: white; }
+        .sponsors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 3rem; align-items: center; max-width: 1200px; margin: auto; }
+        .sponsor-logo img { max-width: 150px; height: auto; filter: grayscale(100%); transition: var(--transition); }
+        .sponsor-logo img:hover { filter: grayscale(0%); }
+        
+        #membership-code-section { background: linear-gradient(135deg, var(--primary-color), #2c3e50); color: white; text-align: center; }
+        #membership-code-section .section-title { color: white; }
+        #membership-code-section p { font-size: 1.2rem; max-width: 600px; margin: -2rem auto 2.5rem; }
+        #membership-code-section .btn-primary { background: var(--accent-color); color: var(--dark-text); font-size: 1.2rem; }
+
+        /* CONTACT SECTION STYLES */
+        #contact-section { background: #F0F4F8; }
+        .contact-container { max-width: 1100px; margin: auto; display: flex; flex-wrap: wrap; gap: 2rem; background: white; padding: 3rem; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
+        .contact-info, .contact-form { flex: 1 1 400px; }
+        .contact-info h3, .contact-form h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary-color); }
+        .contact-info ul { list-style: none; margin-top: 1.5rem; }
+        .contact-info li { display: flex; align-items: center; margin-bottom: 1rem; font-size: 1.1rem; }
+        .contact-info i { font-size: 1.5rem; color: var(--primary-color); margin-left: 1rem; }
+        .social-icons { margin-top: 2rem; display: flex; align-items: center; }
+        .social-icons a { 
+            color: var(--primary-color); 
+            font-size: 1.8rem; /* Made icons slightly larger */
+            margin: 0 0.7rem; 
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: var(--secondary-color);
+            transform: scale(1.1);
+        }
+        .contact-form form input, .contact-form form textarea { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 10px; font-family: 'Tajawal'; }
+        .contact-form form button { width: 100%; padding: 1rem; background: var(--primary-color); color: white; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; }
+        
+        .curved-footer { background: var(--dark-text); color: white; padding: 8rem 2rem 2rem; position: relative; margin-top: 5rem; }
+        .curved-footer::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 120px; background: #F0F4F8; clip-path: ellipse(80% 100% at 50% 100%); transform: translateY(-100%); }
+        /* Style for the copyright text */
+        .footer-copyright {
+            text-align: center;
+            padding-top: 1rem;
+            font-size: 1rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Professional Separator */
+            padding-top: 2rem;
+            margin-top: 1rem;
+        }
+
+        .modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(26, 62, 114, 0.5); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+        .modal-content { 
+            background-color: #fff; 
+            padding: 35px 45px; 
+            border-radius: var(--border-radius); 
+            max-width: 600px; 
+            width: 90%; 
+            position: relative; 
+            animation: slideIn 0.5s ease; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+        }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Custom styling for About Us Modal content - NEW */
+        #aboutModal .modal-content {
+            text-align: right;
+            max-width: 750px; 
+        }
+        #aboutModal .modal-content h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        #aboutModal .modal-content h3 {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        #aboutModal .modal-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        #aboutModal .modal-content ul li {
+            margin-bottom: 10px;
+            padding-right: 25px;
+            position: relative;
+            font-size: 1.05rem;
+            color: var(--dark-text);
+        }
+        #aboutModal .modal-content ul li i {
+            position: absolute;
+            right: 0;
+            top: 5px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        /* END NEW STYLING */
+        
+        @media (max-width: 1200px) { .nav-container { padding: 0.8rem 1.5rem; } .nav-links a, .nav-links .nav-item { margin: 0; } }
+        @media (max-width: 1024px) {
+            .nav-links { display: none; position: absolute; top: 100%; right: 0; width: 100%; background: white; flex-direction: column; padding: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+            .nav-links.active { display: flex; }
+            .nav-item-dropdown:hover .dropdown-menu { display: none; }
+            .hamburger { display: block; }
+        }
+    </style>
+</head>
+<body class="not-loaded">
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="#hero-section" class="logo">
+                <img src="https://i.ibb.co/jk796nCQ/logo-removebg-preview-1.png" alt="شعار أسرة من أجل مصر">
+                <span>من أجل مصر</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <div class="nav-item-dropdown">
+                    <span class="nav-item">الصفحة الرئيسة <i class="fas fa-chevron-down fa-xs"></i></span>
+                    <div class="dropdown-menu">
+                        <span onclick="showAboutModal()">احنا مين</span>
+                        <span onclick="showJoinModal()">انضم لنا</span>
+                        <hr style="margin: 0.5rem 0; border-color: #eee;">
+                        <a href="#board-structure-section">الهيكل</a>
+                        <a href="#activities-section">الأنشطة</a>
+                        <a href="#news-section">الأخبار</a>
+                        <a href="#sponsors-section">الرعاة</a>
+                        <a href="#contact-section">تواصل معنا</a>
+                    </div>
+                </div>
+                <div class="nav-item-dropdown">
+                    <span class="nav-item">الهيكل <i class="fas fa-chevron-down fa-xs"></i></span>
+                    <div class="dropdown-menu">
+                        <a href="#board-structure-section">مجلس الإدارة</a>
+                        <a href="#faculties-section">الكليات</a>
+                    </div>
+                </div>
+                <a href="#activities-section" class="nav-item">الأنشطة</a>
+                <a href="#membership-code-section" class="nav-item">كود العضوية</a>
+                <a href="#news-section" class="nav-item">الأخبار</a>
+                <a href="#sponsors-section" class="nav-item">الرعاة</a>
+                <a href="#contact-section" class="nav-item">تواصل معنا</a>
+                <a href="#" class="nav-item" onclick="showUnderConstructionModal(); return false;">تعلم</a>
+            </div>
+            <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <div class="hero-logo-container"><img src="https://i.ibb.co/jk796nCQ/logo-removebg-preview-1.png" alt="شعار أسرة من أجل مصر بحجم كبير"></div>
+            <h1 class="hero-title">نصنع المستقبل معًا</h1>
+            <p class="hero-subtitle">أسرة طلابية تعمل من أجل تنمية الوطن ورفعة شأنه، من خلال بناء مجتمع طلابي قوي ومبتكر.</p>
+            <div class="hero-buttons">
+                <span class="btn-primary" onclick="showJoinModal()">انضم إلينا الآن</span>
+                <span class="btn-secondary" onclick="showAboutModal()">اعرف المزيد عنا</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="board-structure-section" class="content-section reveal">
+        <h2 class="section-title">المنسقون</h2>
+        <div class="structure-grid">
+            <div class="member-card">
+                <img src="https://i.ibb.co/Psr5FV87/Whats-App-Image-2025-10-23-at-02-44-55.jpg" alt="صورة فاطمة محمد حسين">
+                <h3>فاطمة محمد حسين</h3>
+                <p>منسق عام</p>
+            </div>
+            <div class="member-card">
+                <img src="https://i.ibb.co/27kLJ02Z/Whats-App-Image-2025-10-23-at-02-44-56-2.jpg" alt="صورة نورهان احمد عبد العزيز">
+                <h3>نورهان احمد عبد العزيز</h3>
+                <p>منسق عام</p>
+            </div>
+            <div class="member-card">
+                <img src="https://i.ibb.co/CNCMgN5/Whats-App-Image-2025-10-23-at-02-44-57.jpg" alt="صورة مازن مدحت محمد">
+                <h3>مازن مدحت محمد</h3>
+                <p>منسق عام</p>
+            </div>
+            <div class="member-card">
+                <img src="https://i.ibb.co/LdRN01wM/Whats-App-Image-2025-10-23-at-02-44-56-1.jpg" alt="صورة مروان احمد الطاهر">
+                <h3>مروان احمد الطاهر</h3>
+                <p>منسق عام</p>
+            </div>
+            <div class="member-card">
+                <img src="https://i.ibb.co/1fnQ34LT/Whats-App-Image-2025-10-23-at-02-44-56.jpg" alt="صورة محمد اشرف انور">
+                <h3>محمد اشرف انور</h3>
+                <p>منسق عام</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="faculties-section" class="content-section reveal">
+        <h2 class="section-title">الكليات</h2>
+        <div class="faculties-grid">
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-gavel"></i><h3>الحقوق</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-landmark"></i><h3>الآداب</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-user-nurse"></i><h3>التمريض</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-syringe"></i><h3>معهد التمريض</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-flask"></i><h3>العلوم</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-seedling"></i><h3>الزراعة</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-running"></i><h3>علوم الرياضة</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-fish-fins"></i><h3>مصايد وتكنولوجيا الأسماك</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-archway"></i><h3>الآثار</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-language"></i><h3>الألسن</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-book-reader"></i><h3>دار العلوم</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-cogs"></i><h3>الهندسة</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-solar-panel"></i><h3>هندسة الطاقة</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-heartbeat"></i><h3>الطب</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-paw"></i><h3>الطب البيطري</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-graduation-cap"></i><h3>التربية</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-school"></i><h3>التربية النوعية</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-chart-line"></i><h3>التجارة</h3></div>
+            <div class="faculty-card" onclick="showStructureSoonModal()"><i class="fas fa-handshake"></i><h3>خدمة اجتماعية</h3></div>
+        </div>
+    </section>
+
+    <section id="activities-section" class="content-section reveal">
+        <h2 class="section-title">الأنشطة</h2>
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="committees">اعرف الأنشطة (اللجان)</button>
+            <button class="tab-btn" data-tab="family-activities">أنشطة الأسرة</button>
+        </div>
+        <div id="committees" class="tab-content active">
+            <div class="committees-container">
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-compass committee-icon"></i><span>الجوالة والخدمة العامة</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تهدف لتنمية مهارات القيادة وتحمل المسؤولية والقيام بالخدمات المجتمعية والبيئية.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-book-open committee-icon"></i><span>الثقافية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>مسؤولة عن إثراء الوعي الثقافي والفكري للطلاب عبر الندوات والمناقشات والمسابقات.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-flask committee-icon"></i><span>العلمية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تهتم بتشجيع البحث العلمي والابتكار وتنظيم الورش والمحاضرات في المجالات التقنية والعلمية.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-users-gear committee-icon"></i><span>HR - إدارة الموارد البشرية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تختص بإدارة الأعضاء الجدد والقدامى، تقييم الأداء، وتطوير المهارات الداخلية للأسرة.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-handshake committee-icon"></i><span>PR - العلاقات العامة</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تعمل على بناء علاقات قوية مع الجهات الخارجية بالجامعة والمجتمع لخدمة أهداف الأسرة.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-sitemap committee-icon"></i><span>OR - التنظيم</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>مسؤولة عن التخطيط اللوجستي والتنظيم الكامل لجميع فعاليات ومؤتمرات الأسرة.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-camera-retro committee-icon"></i><span>Media - الإعلام</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تختص بتغطية الفعاليات، النشر الإعلامي على المنصات المختلفة، وتصميم المواد المرئية.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-balance-scale committee-icon"></i><span>الشؤون القانونية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تقدم الدعم القانوني لأعضاء الأسرة، وتضمن تطبيق اللوائح والقوانين الجامعية في العمل.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-chalkboard-teacher committee-icon"></i><span>التدريب والتطوير</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تهدف لرفع كفاءة الأعضاء من خلال ورش العمل، الدورات التدريبية، وتنمية المهارات.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-users committee-icon"></i><span>الاجتماعية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تعمل على تقوية الروابط الاجتماعية بين الطلاب وتنظيم الرحلات والفعاليات الترفيهية.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-dumbbell committee-icon"></i><span>الرياضية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>مسؤولة عن تنظيم البطولات والدورات الرياضية والنشاط البدني داخل الجامعة.</p></div></div></div>
+                <div class="committee-card"><div class="committee-header"><div class="committee-title"><i class="fas fa-palette committee-icon"></i><span>الفنية</span></div><i class="fas fa-plus toggle-icon"></i></div><div class="committee-body"><div class="committee-content"><p>تختص بتنمية المواهب الفنية للطلاب وتنظيم المعارض والعروض الفنية والمسرحية.</p></div></div></div>
+            </div>
+        </div>
+        <div id="family-activities" class="tab-content">
+            <div class="coming-soon-message">
+                <i class="fas fa-tools" style="margin-left: 10px; color: var(--primary-color);"></i> ستضاف أنشطة الأسرة قريباً!
+            </div>
+        </div>
+    </section>
+
+    <section id="news-section" class="content-section reveal">
+        <h2 class="section-title">آخر الأخبار</h2>
+        <div class="news-carousel">
+            <div class="news-item">
+                <div class="news-date">17 اكتوبر 2025</div>
+                <h3>اجتماع( العودة ) للاسرة بحضور السيد الرائد العام لبحث مسار الاسرة للعام الجديد</h3>
+                <img src="https://i.ibb.co/vxcj8q5h/Whats-App-Image-2025-10-23-at-03-18-49.jpg" alt="اجتماع الرائد العام">
+            </div>
+            <div class="news-item">
+                <div class="news-date">22 اكتوبر 2025</div>
+                <h3>فتح باب الترشح لمنسقي الكليات و لجان المركزية</h3>
+                <div class="news-images-container">
+                    <img src="https://i.ibb.co/G4M38mHk/Whats-App-Image-2025-10-23-at-03-25-15.jpg" alt="إعلان فتح باب الترشح 1">
+                    <img src="https://i.ibb.co/JjVFnFQ0/Whats-App-Image-2025-10-23-at-03-25-14.jpg" alt="إعلان فتح باب الترشح 2">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="membership-code-section" class="content-section cta-section reveal">
+        <h2 class="section-title">كود العضوية</h2>
+        <p>استخدم هذا الرابط للوصول إلى صفحة كود العضوية الخاصة بك أو للتحقق من الأكواد.</p>
+        <a href="https://moashraf007.github.io/sfe-code/" target="_blank" class="btn-primary">الانتقال إلى صفحة الكود</a>
+    </section>
+
+    <section id="sponsors-section" class="content-section reveal">
+        <h2 class="section-title">الرعاة</h2>
+        <div class="sponsors-grid">
+            <div class="sponsor-logo"><img src="https://via.placeholder.com/150x80?text=Sponsor+1" alt="Sponsor 1"></div>
+            <div class="sponsor-logo"><img src="https://via.placeholder.com/150x80?text=Sponsor+2" alt="Sponsor 2"></div>
+            <div class="sponsor-logo"><img src="https://via.placeholder.com/150x80?text=Sponsor+3" alt="Sponsor 3"></div>
+            <div class="sponsor-logo"><img src="https://via.placeholder.com/150x80?text=Sponsor+4" alt="Sponsor 4"></div>
+        </div>
+    </section>
+    
+    <section id="contact-section" class="content-section reveal">
+        <h2 class="section-title">تواصل معنا</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>معلومات الاتصال</h3>
+                <p>نسعد بتواصلكم معنا للاستفسارات أو المقترحات أو الشراكات.</p>
+                <ul>
+                    <li><i class="fas fa-envelope"></i><span>sfeaswan1@gmail.com</span></li>
+                    <li><i class="fas fa-map-marker-alt"></i><span>جامعة أسوان</span></li>
+                </ul>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/SFE.aswu/" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a href="mailto:sfeaswan1@gmail.com" title="البريد الإلكتروني"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>أرسل لنا رسالة</h3>
+                <form>
+                    <input type="text" placeholder="الاسم بالكامل" required>
+                    <input type="email" placeholder="البريد الإلكتروني" required>
+                    <textarea rows="5" placeholder="اكتب رسالتك هنا..." required></textarea>
+                    <button type="submit" class="btn-primary" style="width:100%">إرسال</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="curved-footer">
+        <div class="footer-copyright">
+            &copy; 2026 <span style="font-weight: 700;">أسرة طلاب من أجل مصر</span> - جامعة أسوان. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+    
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-users-viewfinder" style="margin-left: 10px;"></i> احنا مين</h2>
+            <p style="font-size: 1.1rem; color: var(--light-text); margin-bottom: 20px;">
+                <span style="font-weight: 700; color: var(--primary-color);">"أسرة طلاب من أجل مصر"</span> هي أسرة طلابية جامعية تسعى لتنمية الشباب المصري وتعزيز انتمائه الوطني عبر مجموعة متنوعة من الأنشطة والبرامج، حيث تهدف الأسرة إلى تأهيل الطلاب ليصبحوا قادة فاعلين في المجتمع، من خلال برامج تدريبية متقدمة وورش عمل تركز على تطوير المهارات القيادية والإعلامية.
+            </p>
+            
+            <h3 style="color: var(--secondary-color);"><i class="fas fa-bullseye" style="margin-left: 8px;"></i> أهداف الأسرة</h3>
+            <ul>
+                <li><i class="fas fa-check-circle"></i> <strong>بناء وتأهيل الطلاب:</strong> تهدف إلى إعداد الطلاب ليصبحوا قادة فاعلين ومؤهلين أكاديميًا ومهنيًا للمشاركة في المجتمع ومواكبة سوق العمل.</li>
+                <li><i class="fas fa-check-circle"></i> <strong>تنمية المهارات:</strong> توفر الأسرة برامج تدريبية وورش عمل لتطوير المهارات القيادية والإعلامية وريادة الأعمال لدى الطلاب.</li>
+                <li><i class="fas fa-check-circle"></i> <strong>تعزيز الانتماء:</strong> تعمل على تنمية الوعي وترسيخ روح الولاء والانتماء للوطن.</li>
+                <li><i class="fas fa-check-circle"></i> <strong>تشجيع العمل الجماعي:</strong> تعزز روح التعاون بين الطلاب وتعتبر العمل الجماعي أساسًا لتحقيق أهدافها.</li>
+                <li><i class="fas fa-check-circle"></i> <strong>توفير مناخ للأنشطة:</strong> توفر للطلاب بيئة لممارسة الأنشطة في مختلف المجالات، مثل الأنشطة العلمية، والثقافية، والرياضية، والترفيهية.</li>
+                <li><i class="fas fa-check-circle"></i> <strong>توطيد العلاقات:</strong> تساعد في توطيد العلاقات بين الطلاب وزملائهم، وكذلك مع أعضاء هيئة التدريس.</li>
+            </ul>
+            
+            <h3 style="color: var(--secondary-color);"><i class="fas fa-chart-line" style="margin-left: 8px;"></i> أنشطة الأسرة</h3>
+            <ul>
+                <li><i class="fas fa-laptop-code"></i> ورش عمل متقدمة.</li>
+                <li><i class="fas fa-microphone-alt"></i> ندوات تثقيفية.</li>
+                <li><i class="fas fa-brain"></i> برامج تدريبية في مجالات الابتكار وريادة الأعمال.</li>
+                <li><i class="fas fa-route"></i> رحلات وحفلات ترفيهية.</li>
+                <li><i class="fas fa-calendar-check"></i> احتفالات لتدشين أنشطتها واستقبال الطلاب الجدد.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="joinModal" class="modal"><div class="modal-content"><h2>انضم إلينا</h2><p>ضع هنا رابط أو استمارة الانضمام.</p></div></div>
+    <div id="underConstructionModal" class="modal"><div class="modal-content"><h2>قريباً...</h2><p>سيتم إضافة هذه الصفحة قريباً.</p></div></div>
+    <div id="structureSoonModal" class="modal">
+        <div class="modal-content">
+            <h2>هيكل الكلية</h2>
+            <p>قريباً سيتم إضافة هيكل الكلية.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => { document.body.classList.add('loaded'); }, 100);
+            
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => observer.observe(el));
+            
+            const committeeHeaders = document.querySelectorAll('.committee-header');
+            committeeHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const body = header.nextElementSibling;
+                    const isActive = header.classList.toggle('active');
+                    if (isActive) { body.style.maxHeight = body.scrollHeight + "px"; } else { body.style.maxHeight = null; }
+                });
+            });
+
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const tabId = button.getAttribute('data-tab');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) { content.classList.add('active'); }
+                    });
+                });
+            });
+
+            const hamburger = document.getElementById('hamburgerBtn');
+            const navLinks = document.getElementById('navLinks');
+            if (hamburger) { hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); }); }
+        });
+        
+        function showModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
+        const showAboutModal = () => showModal('aboutModal');
+        const showJoinModal = () => showModal('joinModal');
+        const showUnderConstructionModal = () => showModal('underConstructionModal');
+        const showStructureSoonModal = () => showModal('structureSoonModal');
+        
+        window.onclick = function(event) {
+            document.querySelectorAll('.modal').forEach(modal => { if (event.target == modal) { modal.style.display = "none"; } });
+        }
+    </script>
+</body>
+</html>
